@@ -1,0 +1,142 @@
+[
+  {
+    "name": "Accesorio Xbox Series",
+    "price": 19990,
+    "category": "Accesorios",
+    "description": "Batería recargable para Xbox Series.",
+    "image": "/img/accesorio xbox Series_20.webp"
+  },
+  {
+    "name": "Audífonos Gamer Inalámbricos",
+    "price": 29990,
+    "category": "Accesorios",
+    "description": "Stereo, manos libres, diseño ergonómico.",
+    "image": "/img/Audifonos-Gamer-Inalambricos.png"
+  },
+  {
+    "name": "Resident Evil Revelations (Switch)",
+    "price": 34990,
+    "category": "Switch",
+    "description": "Resident Evil Revelations.",
+    "image": "/img/nintendo1.jpg"
+  },
+  {
+    "name": "Rayman Legends Definitive (Switch)",
+    "price": 22990,
+    "category": "Switch",
+    "description": "Plataformas cooperativo y divertido.",
+    "image": "/img/nintendo2.jpg"
+  },
+  {
+    "name": "Donkey Kong Country Returns HD (Switch)",
+    "price": 54990,
+    "category": "Switch",
+    "description": "Remaster del clásico de plataformas.",
+    "image": "/img/nintendo3.jpg"
+  },
+  {
+    "name": "Minecraft (Switch)",
+    "price": 29990,
+    "category": "Switch",
+    "description": "Construye, explora y sobrevive.",
+    "image": "/img/nintendo4.png"
+  },
+  {
+    "name": "Just Dance 2025 (Switch)",
+    "price": 44990,
+    "category": "Switch",
+    "description": "Baila los éxitos del momento.",
+    "image": "/img/nintendo5.jpg"
+  },
+  {
+    "name": "Dragon Ball FighterZ (Switch)",
+    "price": 39990,
+    "category": "Switch",
+    "description": "Peleas 2.5D con estilo anime.",
+    "image": "/img/nintendo6.jpg"
+  },
+  {
+    "name": "Luigi’s Mansion 3 (Switch)",
+    "price": 46990,
+    "category": "Switch",
+    "description": "Aventuras fantasmales con Luigi.",
+    "image": "/img/nintendo7.jpg"
+  },
+  {
+    "name": "Control Nintendo Switch Pro (Zelda TotK)",
+    "price": 69990,
+    "category": "Accesorios",
+    "description": "Edición especial Tears of the Kingdom.",
+    "image": "/img/nintendo accesorio 2.jpg"
+  },
+  {
+    "name": "Pokémon Hard Pouch (Switch)",
+    "price": 14990,
+    "category": "Accesorios",
+    "description": "Estuche rígido edición PokéBall.",
+    "image": "/img/nintendo accesorio 1.jpg"
+  },
+  {
+    "name": "EA SPORTS FC 24 (PS5)",
+    "price": 49990,
+    "category": "PS5",
+    "description": "Hypermotion V, modos online y locales.",
+    "image": "/img/play5-5.jpg"
+  },
+  {
+    "name": "UFC 5 Deluxe (PS5)",
+    "price": 59990,
+    "category": "PS5",
+    "description": "El simulador de artes marciales de EA.",
+    "image": "/img/play5-4.jpg"
+  },
+  {
+    "name": "Sonic Superstars (PS5)",
+    "price": 45990,
+    "category": "PS5",
+    "description": "Sonic en 2.5D con nuevos poderes.",
+    "image": "/img/play5-6.jpg"
+  },
+  {
+    "name": "Call of Duty: Modern Warfare III (PS5)",
+    "price": 69990,
+    "category": "PS5",
+    "description": "Campaña y multijugador intenso.",
+    "image": "/img/play5-7.jpg"
+  },
+  {
+    "name": "God of War Ragnarök (PS5)",
+    "price": 64990,
+    "category": "PS5",
+    "description": "Kratos y Atreus en su máxima expresión.",
+    "image": "/img/play5-3.jpg"
+  },
+  {
+    "name": "Tony Hawk's Pro Skater 1+2 (PS5)",
+    "price": 39990,
+    "category": "PS5",
+    "description": "Remaster de los clásicos de skate con mejoras en PS5.",
+    "image": "/img/play5-1.png"
+  },
+  {
+    "name": "Tony Hawk's Pro Skater (PS5)",
+    "price": 44990,
+    "category": "PS5",
+    "description": "Trucos icónicos, mapas clásicos y banda sonora legendaria.",
+    "image": "/img/play5-2.jpg"
+  },
+  {
+    "name": "Control Inalámbrico PS5 (Azul)",
+    "price": 74990,
+    "category": "Accesorios",
+    "description": "DualSense con vibración háptica y gatillos adaptativos.",
+    "image": "/img/play5 accesorio 1.jpg"
+  },
+  {
+    "name": "Base de Carga DualSense (PS5)",
+    "price": 29990,
+    "category": "Accesorios",
+    "description": "Carga simultánea para dos controles PS5.",
+    "image": "/img/play5 accesorio 2.avif"
+  }
+]
