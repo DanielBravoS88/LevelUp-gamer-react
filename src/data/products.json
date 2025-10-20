@@ -138,5 +138,26 @@
     "category": "Accesorios",
     "description": "Carga simultánea para dos controles PS5.",
     "image": "/img/play5 accesorio 2.avif"
+  },
+  {
+    "name": "PlayStation 5 (PS5)",
+    "price": 549990,
+    "category": "Consolas",
+    "description": "Edición PS5, rendimiento de última generación.",
+    "image": "/img/consola_ps5.jpg"
+  },
+  {
+    "name": "Nintendo Switch",
+    "price": 399990,
+    "category": "Consolas",
+    "description": "Híbrida: portátil y para TV, ideal para jugar en todas partes.",
+    "image": "/img/consola_switch.jpg"
+  },
+  {
+    "name": "Super Nintendo (Clásica)",
+    "price": 129990,
+    "category": "Consolas",
+    "description": "La consola clásica para los amantes de lo retro.",
+    "image": "/img/consola_supernintendo.jpg"
   }
 ]
