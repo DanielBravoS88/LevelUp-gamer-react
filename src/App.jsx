@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import Header from './components/Header.jsx'
 import Banner from './components/Banner.jsx'
 import ProductGrid from './components/ProductGrid.jsx'
+import ProductDetail from './components/ProductDetail.jsx'
 import Cart from './components/Cart.jsx'
 import PurchaseSummary from './components/PurchaseSummary.jsx'
 import RegisterModal from './components/RegisterModal.jsx'
@@ -124,6 +125,13 @@ export default function App(){
     <>
       <Routes>
         <Route path="/" element={<Home state={state}/>} />
+        <Route path="/producto/:slug" element={<>
+          <Header q={q} setQ={setQ} onOpenLogin={()=>setLoginOpen(true)} onOpenCart={()=>setCartOpen(true)} cartQty={totalQty}/>
+          <ProductDetail products={products} onAdd={add} />
+          <Footer/>
+          <Cart open={cartOpen} items={cart} changeQty={changeQty} removeItem={remove} total={total} onClose={()=>setCartOpen(false)}/>
+          <RegisterModal open={loginOpen} onClose={()=>setLoginOpen(false)}/>
+        </>} />
         <Route path="/resumen" element={<>
           <Header q={q} setQ={setQ} onOpenLogin={()=>setLoginOpen(true)} onOpenCart={()=>setCartOpen(true)} cartQty={totalQty}/>
           <PurchaseSummary cart={cart} clearCart={clearCart}/>

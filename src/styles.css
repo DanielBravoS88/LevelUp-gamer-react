@@ -76,9 +76,13 @@ select,.chip{background:#0a0a0a;border:1px solid var(--muted);color:var(--text-2
 .chip.active{background:var(--accent);color:#000;border-color:transparent}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 .card{background:var(--card);border:1px solid var(--muted);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+
+/* (Removed subtle hover effect per request) */
 .tag{position:absolute;top:10px;left:10px;background:#111;border:1px solid var(--muted);color:var(--text-2);padding:4px 8px;border-radius:999px;font-size:12px}
 .media{position:relative;background:#0a0a0a}
 .media img{aspect-ratio:16/9;object-fit:cover}
+
+/* (Hover effect removed per request) */
 .body{padding:12px}
 .title{font-weight:700}
 .price{font-size:18px;margin:6px 0;font-weight:800;color:var(--accent-2)}
