@@ -83,10 +83,10 @@ select,.chip{background:#0a0a0a;border:1px solid var(--muted);color:var(--text-2
 .media img{aspect-ratio:16/9;object-fit:cover}
 
 /* (Hover effect removed per request) */
-.body{padding:12px}
+.body{padding:12px;display:flex;flex-direction:column;flex:1}
 .title{font-weight:700}
 .price{font-size:18px;margin:6px 0;font-weight:800;color:var(--accent-2)}
-.desc{color:var(--text-2);font-size:14px;min-height:44px}
+.desc{color:var(--text-2);font-size:14px;min-height:44px;flex-grow:1}
 .card .row{display:flex;gap:8px;margin-top:auto}
 
 /* Cart */
