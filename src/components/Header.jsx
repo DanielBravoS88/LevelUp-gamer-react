@@ -21,7 +21,6 @@ export default function Header({ q, setQ, onOpenLogin, onOpenCart, cartQty=0 }){
       <div className="brand"><div className="logo">LU</div><h1>LevelUp Gamer</h1></div>
       <div className="spacer" />
       <div className="actions">
-        <button className="btn" id="btnLogin" onClick={onOpenLogin}>Iniciar sesión</button>
         <button className="btn primary cart-button" id="btnCart" onClick={onOpenCart}>
           Carrito <span className="badge" id="cartCount">{cartQty}</span>
         </button>

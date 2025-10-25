@@ -1,5 +1,9 @@
 import React,{useEffect,useMemo,useState} from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
+import { AuthProvider, useAuth } from './auth/AuthContext'
+import ProtectedRoute from './auth/ProtectedRoute'
+import RoleRoute from './auth/RoleRoute'
+import AppNavbar from './components/AppNavbar'
 import Header from './components/Header.jsx'
 import Banner from './components/Banner.jsx'
 import ProductGrid from './components/ProductGrid.jsx'
@@ -12,12 +16,18 @@ import Footer from './components/Footer.jsx'
 import productsData from './data/products.json'
 import CartDock from './components/CartDock.jsx'
 import CheckoutModal from './components/CheckoutModal.jsx'
+import SignIn from './pages/SignIn'
+import Dashboard from './pages/Dashboard'
+import AdminPanel from './pages/AdminPanel'
+import UserArea from './pages/UserArea'
+import NotFound from './pages/NotFound'
 
 const chips=['Todos','PS5','Switch','Consolas','Accesorios']
 
 function Home({state}){
   const {filter,setFilter,q,setQ,order,setOrder,add,items} = state
   return (<>
+    <AppNavbar />
     <Header q={q} setQ={setQ} onOpenLogin={()=>state.setLoginOpen(true)} onOpenCart={()=>state.setCartOpen(true)} cartQty={state.totalQty}/>
     <Banner/>
     <main>
@@ -71,8 +81,9 @@ function Home({state}){
   </>)
 }
 
-export default function App(){
+function AppContent() {
   const navigate = useNavigate()
+  const { adminChanges } = useAuth()
   const [products,setProducts] = useState([])
   const [filter,setFilter] = useState('Todos')
   const [q,setQ] = useState('')
@@ -82,7 +93,11 @@ export default function App(){
   const [checkoutOpen,setCheckoutOpen] = useState(false)
   const [cart,setCart] = useState(()=>{ try { return JSON.parse(localStorage.getItem('cart')||'[]') } catch { return [] } })
 
-  useEffect(()=>{ setProducts(Array.isArray(productsData)?productsData:[]) },[])
+  useEffect(()=>{ 
+    // Usar productos del admin si están disponibles, sino los originales
+    const productsToUse = adminChanges.products || (Array.isArray(productsData) ? productsData : []);
+    setProducts(productsToUse);
+  },[adminChanges])
 
   useEffect(()=>{ localStorage.setItem('cart', JSON.stringify(cart)) },[cart])
 
@@ -125,23 +140,47 @@ export default function App(){
     <>
       <Routes>
         <Route path="/" element={<Home state={state}/>} />
+        <Route path="/signin" element={<SignIn />} />
+        
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/user-area" element={<UserArea />} />
+        </Route>
+
+        <Route element={<RoleRoute allow={['admin']} />}>
+          <Route path="/admin" element={<AdminPanel />} />
+        </Route>
+
         <Route path="/producto/:slug" element={<>
+          <AppNavbar />
           <Header q={q} setQ={setQ} onOpenLogin={()=>setLoginOpen(true)} onOpenCart={()=>setCartOpen(true)} cartQty={totalQty}/>
           <ProductDetail products={products} onAdd={add} />
           <Footer/>
           <Cart open={cartOpen} items={cart} changeQty={changeQty} removeItem={remove} total={total} onClose={()=>setCartOpen(false)}/>
           <RegisterModal open={loginOpen} onClose={()=>setLoginOpen(false)}/>
         </>} />
+        
         <Route path="/resumen" element={<>
+          <AppNavbar />
           <Header q={q} setQ={setQ} onOpenLogin={()=>setLoginOpen(true)} onOpenCart={()=>setCartOpen(true)} cartQty={totalQty}/>
           <PurchaseSummary cart={cart} clearCart={clearCart}/>
           <Footer/>
           <Cart open={cartOpen} items={cart} changeQty={changeQty} removeItem={remove} total={total} onClose={()=>setCartOpen(false)}/>
           <RegisterModal open={loginOpen} onClose={()=>setLoginOpen(false)}/>
         </>} />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <CartDock count={totalQty} onOpen={()=>setCartOpen(true)} />
       <CheckoutModal open={checkoutOpen} cart={cart} onPay={()=>{ alert('Pago realizado. ¡Gracias!'); setCheckoutOpen(false); clearCart(); navigate('/') }} onClose={()=>setCheckoutOpen(false)} />
     </>
+  )
+}
+
+export default function App(){
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }

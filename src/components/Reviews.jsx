@@ -1,4 +1,5 @@
 import React,{useEffect,useMemo,useState} from 'react'
+import { useAuth } from '../auth/AuthContext'
 
 const defaultSeed = [
   {id:1, name:'Felipe Retamal', text:'Funciona perfecto. Primera compra y repetiré ✨', score:5},
@@ -7,6 +8,7 @@ const defaultSeed = [
 ]
 
 export default function Reviews(){
+  const { isAdmin } = useAuth()
   const [items,setItems]=useState(()=>{
     try{
       const saved = JSON.parse(localStorage.getItem('reviews')||'[]')
@@ -43,28 +45,66 @@ export default function Reviews(){
   return (
     <section className="container section">
       <h3>Lo que dicen nuestros clientes</h3>
-      <form onSubmit={editing?saveEdit:add} style={{display:'grid',gridTemplateColumns:'1fr 2fr auto',gap:8,marginBottom:12}}>
-        <input placeholder="Tu nombre" value={name} onChange={e=>setName(e.target.value)} required/>
-        <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          <input placeholder="Tu reseña" value={text} onChange={e=>setText(e.target.value)} style={{flex:1}} required/>
-          <Stars value={score} editable onPick={setScore}/>
-        </div>
-        <button className="btn primary">{editing?'Guardar':'Añadir'}</button>
-        {editing && <button type="button" className="btn" onClick={cancelEdit}>Cancelar</button>}
-      </form>
+      
       <div className="reviews">
         {items.map(r=>(
           <div className="review" key={r.id}>
-            <strong>{r.name}</strong>
-            <div><Stars value={r.score||5}/></div>
-            <p className="desc">{r.text}</p>
-            <div style={{display:'flex',gap:8}}>
-              <button className="btn" onClick={()=>startEdit(r.id)}>Editar</button>
-              <button className="btn" onClick={()=>del(r.id)}>Eliminar</button>
+            <div className="review-header">
+              <strong className="review-name">{r.name}</strong>
+              <div className="review-stars"><Stars value={r.score||5}/></div>
             </div>
+            <p className="review-text">{r.text}</p>
+            {isAdmin && (
+              <div className="review-actions">
+                <button className="btn btn-edit" onClick={()=>startEdit(r.id)}>Editar</button>
+                <button className="btn btn-delete" onClick={()=>del(r.id)}>Eliminar</button>
+              </div>
+            )}
           </div>
         ))}
         {!items.length && <div className="desc">Aún no hay reseñas. ¡Escribe la primera! ✨</div>}
+      </div>
+
+      <div className="review-form-section">
+        <h4>Déjanos tu comentario</h4>
+        <p className="form-subtitle">Comparte tu experiencia con otros gamers</p>
+        <form onSubmit={editing?saveEdit:add} className="review-form">
+          <div className="form-row">
+            <div className="input-group">
+              <label>Tu nombre</label>
+              <input 
+                placeholder="Escribe tu nombre" 
+                value={name} 
+                onChange={e=>setName(e.target.value)} 
+                required
+              />
+            </div>
+            <div className="input-group rating-group">
+              <label>Tu calificación</label>
+              <Stars value={score} editable onPick={setScore}/>
+            </div>
+          </div>
+          <div className="input-group">
+            <label>Tu reseña</label>
+            <textarea 
+              placeholder="Cuéntanos qué te pareció tu experiencia..." 
+              value={text} 
+              onChange={e=>setText(e.target.value)} 
+              required
+              rows="3"
+            />
+          </div>
+          <div className="form-actions">
+            <button type="submit" className="btn primary">
+              {editing ? 'Actualizar reseña' : 'Publicar reseña'}
+            </button>
+            {editing && (
+              <button type="button" className="btn secondary" onClick={cancelEdit}>
+                Cancelar
+              </button>
+            )}
+          </div>
+        </form>
       </div>
     </section>
   )
