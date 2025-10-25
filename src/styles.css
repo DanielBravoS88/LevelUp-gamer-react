@@ -57,16 +57,16 @@ header{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.85);backdrop-filt
 .bb-cta-title{margin:0 0 10px;font-family:Orbitron,Roboto,sans-serif}
 
 /* Promos */
-.promos-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
-.promo{display:block;background:var(--card);border:1px solid var(--muted);border-radius:16px;padding:16px;text-decoration:none;color:var(--text)}
+.promos-row{display:flex;justify-content:center;gap:24px;margin:16px auto;flex-wrap:wrap;max-width:960px}
+.promo{display:block;background:var(--card);border:1px solid var(--muted);border-radius:16px;padding:16px;text-decoration:none;color:var(--text);flex:0 1 360px;width:100%;max-width:380px}
 .promo:hover{border-color:#2a2a2a}
 .promo-title{font-weight:700;margin-bottom:6px}
 .promo-sub{color:var(--text-2);font-size:14px}
 
 /* Headline */
-.headline{margin:8px 0 0}
-.headline-inner{background:#0b1423;border:1px solid var(--muted);border-radius:16px;padding:20px}
-.kpis{display:flex;gap:16px;flex-wrap:wrap;color:var(--text-2)}
+.headline{margin:24px auto 0;display:flex;justify-content:center;max-width:100%}
+.headline-inner{background:#0b1423;border:1px solid var(--muted);border-radius:16px;padding:24px;margin:0 auto;width:min(100%,880px);text-align:center}
+.kpis{display:flex;gap:16px;flex-wrap:wrap;color:var(--text-2);justify-content:center}
 .kpis span{background:#0b0b0b;border:1px solid var(--muted);padding:6px 10px;border-radius:999px}
 
 /* Catalog */
@@ -314,7 +314,7 @@ select,.chip{background:#0a0a0a;border:1px solid var(--muted);color:var(--text-2
 @media (max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:1000px){.lp-footer__container{grid-template-columns:1fr 1fr;gap:26px}}
 @media (max-width:900px){.nb-quick{display:none}.search--nb{max-width:none}}
-@media (max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}.reviews,.blog{grid-template-columns:1fr}.promos-row{grid-template-columns:1fr}.billboard{height:260px}.info-grid{grid-template-columns:1fr}}
+@media (max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}.reviews,.blog{grid-template-columns:1fr}.promos-row{flex-direction:column;align-items:center}.promo{max-width:500px}.billboard{height:260px}.info-grid{grid-template-columns:1fr}}
 @media (max-width:620px){.lp-footer__container{grid-template-columns:1fr}.lp-footer__title{text-align:center}}
 @media (max-width:480px){.actions{flex-wrap:wrap;gap:6px}.brand h1{font-size:16px}.search{max-width:none}.billboard{height:220px}}
 
