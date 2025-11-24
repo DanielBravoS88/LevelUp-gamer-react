@@ -2,15 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import productsData from '../data/products.json';
 
-// Productos originales (estado base) - ahora usa los datos reales
-const ORIGINAL_PRODUCTS = Array.isArray(productsData) ? productsData.map((product, index) => ({
-  id: index + 1,
-  name: product.name,
-  price: product.price,
-  category: product.category,
-  description: product.description || '',
-  image: product.image || ''
-})) : [];
+// Productos originales (estado base) - usa los datos reales sin modificar
+const ORIGINAL_PRODUCTS = Array.isArray(productsData) ? productsData : [];
 
 export default function AdminPanel() {
   const { user, saveAdminChanges, adminChanges } = useAuth();
@@ -36,7 +29,6 @@ export default function AdminPanel() {
     e.preventDefault();
     if (newProduct.name && newProduct.price) {
       const product = {
-        id: Date.now(),
         name: newProduct.name,
         price: parseInt(newProduct.price),
         category: newProduct.category,
@@ -63,7 +55,7 @@ export default function AdminPanel() {
     e.preventDefault();
     if (editingProduct && newProduct.name && newProduct.price) {
       const updatedProducts = products.map(p => 
-        p.id === editingProduct.id 
+        p.name === editingProduct.name 
           ? { 
               ...p, 
               name: newProduct.name, 
@@ -79,9 +71,9 @@ export default function AdminPanel() {
     }
   };
 
-  const handleDeleteProduct = (id) => {
+  const handleDeleteProduct = (productName) => {
     if (confirm('¿Estás seguro de eliminar este producto?')) {
-      const updatedProducts = products.filter(p => p.id !== id);
+      const updatedProducts = products.filter(p => p.name !== productName);
       setProducts(updatedProducts);
       setHasUnsavedChanges(true);
     }
@@ -192,7 +184,7 @@ export default function AdminPanel() {
               </thead>
               <tbody>
                 {products.map(product => (
-                  <tr key={product.id}>
+                  <tr key={product.name}>
                     <td>{product.name}</td>
                     <td>${product.price.toLocaleString()}</td>
                     <td>{product.category}</td>
@@ -205,7 +197,7 @@ export default function AdminPanel() {
                       </button>
                       <button 
                         className="btn btn-delete"
-                        onClick={() => handleDeleteProduct(product.id)}
+                        onClick={() => handleDeleteProduct(product.name)}
                       >
                         Eliminar
                       </button>

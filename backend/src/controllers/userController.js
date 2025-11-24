@@ -13,7 +13,7 @@ const generarToken = (id) => {
 // @access  Public
 export const registrarUsuario = async (req, res) => {
   try {
-    const { nombre, apellido, email, password, telefono, direccion } = req.body;
+    const { nombre, apellido, email, password, telefono, direccion, rol } = req.body; // ⭐ Agregado 'rol'
     
     // Verificar si el usuario ya existe
     const usuarioExiste = await User.findOne({ email });
@@ -32,7 +32,8 @@ export const registrarUsuario = async (req, res) => {
       email,
       password,
       telefono,
-      direccion
+      direccion,
+      rol: rol || 'usuario' // ⭐ Si no se envía rol, por defecto será 'usuario'
     });
     
     // Generar token

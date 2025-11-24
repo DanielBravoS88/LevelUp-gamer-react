@@ -17,6 +17,7 @@ import productsData from './data/products.json'
 import CartDock from './components/CartDock.jsx'
 import CheckoutModal from './components/CheckoutModal.jsx'
 import SignIn from './pages/SignIn'
+import Register from './pages/Register'  // ⭐ NUEVO: Importar Register
 import Dashboard from './pages/Dashboard'
 import AdminPanel from './pages/AdminPanel'
 import UserArea from './pages/UserArea'
@@ -141,6 +142,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<Home state={state}/>} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/register" element={<Register />} /> {/* ⭐ NUEVO: Ruta de registro */}
         
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />

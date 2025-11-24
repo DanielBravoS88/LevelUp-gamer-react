@@ -4,7 +4,7 @@
     "price": 19990,
     "category": "Accesorios",
     "description": "Batería recargable para Xbox Series.",
-    "image": "/img/accesorio xbox Series_20.jpg"
+    "image": "/img/accesorio_xbox_series_20.jpg"
   },
   {
     "name": "Audífonos Gamer Inalámbricos",
@@ -67,14 +67,14 @@
     "price": 69990,
     "category": "Accesorios",
     "description": "Edición especial Tears of the Kingdom.",
-    "image": "/img/nintendo accesorio 2.jpg"
+    "image": "/img/nintendo_accesorio_2.jpg"
   },
   {
     "name": "Pokémon Hard Pouch (Switch)",
     "price": 14990,
     "category": "Accesorios",
     "description": "Estuche rígido edición PokéBall.",
-    "image": "/img/nintendo accesorio 1.jpg"
+    "image": "/img/nintendo_accesorio_1.jpg"
   },
   {
     "name": "EA SPORTS FC 24 (PS5)",
@@ -130,14 +130,14 @@
     "price": 74990,
     "category": "Accesorios",
     "description": "DualSense con vibración háptica y gatillos adaptativos.",
-    "image": "/img/play5 accesorio 1.jpg"
+    "image": "/img/play5_accesorio_1.jpg"
   },
   {
     "name": "Base de Carga DualSense (PS5)",
     "price": 29990,
     "category": "Accesorios",
     "description": "Carga simultánea para dos controles PS5.",
-    "image": "/img/play5 accesorio 2.avif"
+    "image": "/img/play5_accesorio_2.avif"
   },
   {
     "name": "PlayStation 5 (PS5)",
