@@ -242,3 +242,91 @@ export const obtenerUsuarioPorId = async (req, res) => {
     });
   }
 };
+
+// @desc    Actualizar rol de usuario (solo admin)
+// @route   PUT /api/users/:id/rol
+// @access  Private/Admin
+export const actualizarRolUsuario = async (req, res) => {
+  try {
+    const { rol } = req.body;
+    
+    // Validar que el rol sea válido
+    if (!['usuario', 'admin'].includes(rol)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Rol inválido. Debe ser "usuario" o "admin"'
+      });
+    }
+    
+    const usuario = await User.findById(req.params.id);
+    
+    if (!usuario) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+    
+    usuario.rol = rol;
+    await usuario.save();
+    
+    res.status(200).json({
+      success: true,
+      message: `Usuario actualizado a rol: ${rol}`,
+      data: {
+        _id: usuario._id,
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        email: usuario.email,
+        rol: usuario.rol
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al actualizar rol',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Eliminar usuario (solo admin)
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+export const eliminarUsuario = async (req, res) => {
+  try {
+    const usuario = await User.findById(req.params.id);
+    
+    if (!usuario) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+    
+    // Evitar que el admin se elimine a sí mismo
+    if (req.user._id.toString() === req.params.id) {
+      return res.status(400).json({
+        success: false,
+        message: 'No puedes eliminar tu propia cuenta'
+      });
+    }
+    
+    await User.findByIdAndDelete(req.params.id);
+    
+    res.status(200).json({
+      success: true,
+      message: 'Usuario eliminado exitosamente',
+      data: {
+        _id: usuario._id,
+        email: usuario.email
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al eliminar usuario',
+      error: error.message
+    });
+  }
+};

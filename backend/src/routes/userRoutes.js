@@ -5,8 +5,11 @@ import {
   obtenerPerfil,
   actualizarPerfil,
   obtenerUsuarios,
-  obtenerUsuarioPorId
+  obtenerUsuarioPorId,
+  actualizarRolUsuario,
+  eliminarUsuario
 } from '../controllers/userController.js';
+import { protegerRuta, esAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -14,12 +17,14 @@ const router = express.Router();
 router.post('/registro', registrarUsuario);
 router.post('/login', loginUsuario);
 
-// Rutas privadas (requieren autenticación) - Agregaremos middleware después
-router.get('/perfil', obtenerPerfil);
-router.put('/perfil', actualizarPerfil);
+// Rutas privadas (requieren autenticación)
+router.get('/perfil', protegerRuta, obtenerPerfil);
+router.put('/perfil', protegerRuta, actualizarPerfil);
 
 // Rutas de administración (solo admin)
-router.get('/', obtenerUsuarios);
-router.get('/:id', obtenerUsuarioPorId);
+router.get('/', protegerRuta, esAdmin, obtenerUsuarios);
+router.get('/:id', protegerRuta, esAdmin, obtenerUsuarioPorId);
+router.put('/:id/rol', protegerRuta, esAdmin, actualizarRolUsuario);
+router.delete('/:id', protegerRuta, esAdmin, eliminarUsuario);
 
 export default router;

@@ -1,0 +1,290 @@
+{
+  "info": {
+    "name": "LevelUp Gamer API",
+    "description": "Colección de endpoints para gestionar usuarios y administradores",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('admin_token', jsonData.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@levelup.com\",\n  \"password\": \"admin123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/login",
+              "host": ["{{base_url}}"],
+              "path": ["users", "login"]
+            }
+          }
+        },
+        {
+          "name": "Registro Usuario Común",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Usuario\",\n  \"apellido\": \"Prueba\",\n  \"email\": \"usuario@ejemplo.com\",\n  \"password\": \"123456\",\n  \"telefono\": \"987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/registro",
+              "host": ["{{base_url}}"],
+              "path": ["users", "registro"]
+            }
+          }
+        },
+        {
+          "name": "Registro Usuario Admin (Directo)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo\",\n  \"apellido\": \"Admin\",\n  \"email\": \"nuevo.admin@levelup.com\",\n  \"password\": \"password123\",\n  \"telefono\": \"123456789\",\n  \"rol\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/registro",
+              "host": ["{{base_url}}"],
+              "path": ["users", "registro"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuarios - Perfil",
+      "item": [
+        {
+          "name": "Obtener Mi Perfil",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/perfil",
+              "host": ["{{base_url}}"],
+              "path": ["users", "perfil"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Mi Perfil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Admin\",\n  \"apellido\": \"Actualizado\",\n  \"telefono\": \"999888777\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/perfil",
+              "host": ["{{base_url}}"],
+              "path": ["users", "perfil"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Gestión de Usuarios",
+      "item": [
+        {
+          "name": "Obtener Todos los Usuarios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Usuario por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/:id",
+              "host": ["{{base_url}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID del usuario"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Promover Usuario a Admin",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rol\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/:id/rol",
+              "host": ["{{base_url}}"],
+              "path": ["users", ":id", "rol"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID del usuario a promover"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Degradar Admin a Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rol\": \"usuario\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/:id/rol",
+              "host": ["{{base_url}}"],
+              "path": ["users", ":id", "rol"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID del admin a degradar"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/:id",
+              "host": ["{{base_url}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID del usuario a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

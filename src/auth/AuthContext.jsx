@@ -2,24 +2,14 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext(null);
 
-// Usuario ejemplo para demo
-const ADMIN_USER = {
-  name: "Admin",
-  role: 'admin'
-};
-
-const USER_EXAMPLE = {
-  name: "Daniel",
-  role: 'user'
-};
-
-const KEY = 'rolesapp_auth_v1';
-const ADMIN_CHANGES_KEY = 'rolesapp_admin_changes_v1';
+const KEY = 'levelup_auth_user';
+const ADMIN_CHANGES_KEY = 'levelup_admin_changes';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem(KEY));
+      const savedUser = localStorage.getItem(KEY);
+      return savedUser ? JSON.parse(savedUser) : null;
     } catch {
       return null;
     }
@@ -48,12 +38,21 @@ export function AuthProvider({ children }) {
     }
   }, [adminChanges, user]);
 
-  const login = ({ name, role }) => setUser({ name, role });
+  // Login ahora espera: { id, name, email, role, token }
+  const login = (userData) => {
+    setUser({
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+      role: userData.role,
+      token: userData.token
+    });
+  };
   
   const logout = () => {
     setUser(null);
-    // Limpiar cambios temporales del admin al cerrar sesión
     setAdminChanges({});
+    localStorage.removeItem(KEY);
     localStorage.removeItem(ADMIN_CHANGES_KEY);
   };
 
@@ -66,7 +65,10 @@ export function AuthProvider({ children }) {
   const getAdminChanges = () => adminChanges;
 
   const isAdmin = user?.role === 'admin';
-  const isUser = user?.role === 'user';
+  const isUser = user?.role === 'usuario' || user?.role === 'user';
+
+  // Función para obtener el token del usuario actual
+  const getToken = () => user?.token;
 
   return (
     <AuthContext.Provider value={{ 
@@ -77,7 +79,8 @@ export function AuthProvider({ children }) {
       isUser,
       saveAdminChanges,
       getAdminChanges,
-      adminChanges
+      adminChanges,
+      getToken
     }}>
       {children}
     </AuthContext.Provider>
