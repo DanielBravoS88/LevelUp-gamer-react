@@ -93,12 +93,50 @@ function AppContent() {
   const [loginOpen,setLoginOpen] = useState(false)
   const [checkoutOpen,setCheckoutOpen] = useState(false)
   const [cart,setCart] = useState(()=>{ try { return JSON.parse(localStorage.getItem('cart')||'[]') } catch { return [] } })
+  const [loadingProducts, setLoadingProducts] = useState(true)
 
+  // Cargar productos desde el backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/products');
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+          // Transformar productos del backend al formato del frontend
+          const transformedProducts = data.data.map(p => ({
+            _id: p._id,
+            name: p.nombre,
+            price: p.precio,
+            category: p.plataforma,
+            description: p.descripcion,
+            image: p.imagen || '/img/placeholder.jpg'
+          }));
+          setProducts(transformedProducts);
+        } else {
+          // Si falla, usar productos locales
+          const productsToUse = adminChanges.products || (Array.isArray(productsData) ? productsData : []);
+          setProducts(productsToUse);
+        }
+      } catch (error) {
+        console.error('Error cargando productos del backend, usando datos locales:', error);
+        // Fallback a productos locales
+        const productsToUse = adminChanges.products || (Array.isArray(productsData) ? productsData : []);
+        setProducts(productsToUse);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Actualizar productos si el admin hace cambios
   useEffect(()=>{ 
-    // Usar productos del admin si están disponibles, sino los originales
-    const productsToUse = adminChanges.products || (Array.isArray(productsData) ? productsData : []);
-    setProducts(productsToUse);
-  },[adminChanges])
+    if (adminChanges.products && !loadingProducts) {
+      setProducts(adminChanges.products);
+    }
+  },[adminChanges, loadingProducts])
 
   useEffect(()=>{ localStorage.setItem('cart', JSON.stringify(cart)) },[cart])
 

@@ -14,6 +14,11 @@
       "key": "admin_token",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "user_token",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -279,6 +284,240 @@
                   "key": "id",
                   "value": "",
                   "description": "ID del usuario a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Órdenes - Usuario",
+      "item": [
+        {
+          "name": "Crear Orden (Compra)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productos\": [\n    {\n      \"producto\": \"PRODUCT_ID_HERE\",\n      \"nombre\": \"Spider-Man 2\",\n      \"cantidad\": 1,\n      \"precio\": 59990,\n      \"imagen\": \"/img/spiderman2.jpg\"\n    }\n  ],\n  \"direccionEnvio\": {\n    \"calle\": \"Av. Providencia 1234\",\n    \"ciudad\": \"Santiago\",\n    \"region\": \"Región Metropolitana\",\n    \"codigoPostal\": \"7500000\"\n  },\n  \"metodoPago\": \"Tarjeta de Crédito\",\n  \"precioProductos\": 59990,\n  \"precioEnvio\": 5000,\n  \"precioTotal\": 64990\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/orders",
+              "host": ["{{base_url}}"],
+              "path": ["orders"]
+            }
+          }
+        },
+        {
+          "name": "Ver Mis Órdenes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders/mis-ordenes",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "mis-ordenes"]
+            }
+          }
+        },
+        {
+          "name": "Ver Detalle de Orden",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders/:id",
+              "host": ["{{base_url}}"],
+              "path": ["orders", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID de la orden"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Marcar Orden como Pagada",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders/:id/pagar",
+              "host": ["{{base_url}}"],
+              "path": ["orders", ":id", "pagar"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID de la orden"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancelar Orden",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders/:id/cancelar",
+              "host": ["{{base_url}}"],
+              "path": ["orders", ":id", "cancelar"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID de la orden a cancelar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Órdenes - Admin",
+      "item": [
+        {
+          "name": "Ver Todas las Órdenes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders/admin/todas",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "admin", "todas"]
+            }
+          }
+        },
+        {
+          "name": "Estadísticas de Órdenes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders/admin/estadisticas",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "admin", "estadisticas"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Estado de Envío",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estadoEnvio\": \"Enviado\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/:id/envio",
+              "host": ["{{base_url}}"],
+              "path": ["orders", ":id", "envio"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID de la orden"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Obtener Todos los Productos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": ["{{base_url}}"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/:id",
+              "host": ["{{base_url}}"],
+              "path": ["products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID del producto"
                 }
               ]
             }

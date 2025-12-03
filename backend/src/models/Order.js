@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema({
     producto: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Product',
-      required: true
+      required: false  // Cambiado a false para permitir productos sin ID
     },
     nombre: {
       type: String,

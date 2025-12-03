@@ -25,20 +25,19 @@ export const crearOrden = async (req, res) => {
 
     // Verificar stock de cada producto
     for (let item of productos) {
-      const producto = await Product.findById(item.producto);
-      
-      if (!producto) {
-        return res.status(404).json({
-          success: false,
-          message: `Producto ${item.nombre} no encontrado`
-        });
-      }
-
-      if (producto.stock < item.cantidad) {
-        return res.status(400).json({
-          success: false,
-          message: `Stock insuficiente para ${producto.nombre}. Stock disponible: ${producto.stock}`
-        });
+      // Si el producto tiene ID, verificar stock
+      if (item.producto) {
+        const producto = await Product.findById(item.producto);
+        
+        if (producto) {
+          if (producto.stock < item.cantidad) {
+            return res.status(400).json({
+              success: false,
+              message: `Stock insuficiente para ${producto.nombre}. Stock disponible: ${producto.stock}`
+            });
+          }
+        }
+        // Si no encuentra el producto pero tiene ID, continuar sin validar stock
       }
     }
 
@@ -55,10 +54,16 @@ export const crearOrden = async (req, res) => {
 
     // Actualizar stock de productos
     for (let item of productos) {
-      await Product.findByIdAndUpdate(
-        item.producto,
-        { $inc: { stock: -item.cantidad } }
-      );
+      // Solo actualizar stock si el producto tiene ID y existe en la BD
+      if (item.producto) {
+        const producto = await Product.findById(item.producto);
+        if (producto && producto.stock >= item.cantidad) {
+          await Product.findByIdAndUpdate(
+            item.producto,
+            { $inc: { stock: -item.cantidad } }
+          );
+        }
+      }
     }
 
     // Poblar datos del usuario
@@ -231,6 +236,112 @@ export const actualizarEstadoEnvio = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error al actualizar estado de envío',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Cancelar orden (usuario o admin)
+// @route   PUT /api/orders/:id/cancelar
+// @access  Private
+export const cancelarOrden = async (req, res) => {
+  try {
+    const orden = await Order.findById(req.params.id);
+
+    if (!orden) {
+      return res.status(404).json({
+        success: false,
+        message: 'Orden no encontrada'
+      });
+    }
+
+    // Verificar que el usuario sea el dueño de la orden o sea admin
+    if (orden.usuario.toString() !== req.user._id.toString() && req.user.rol !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'No tienes permiso para cancelar esta orden'
+      });
+    }
+
+    // Solo se pueden cancelar órdenes que no han sido enviadas
+    if (orden.estadoEnvio === 'Enviado' || orden.estadoEnvio === 'En Camino' || orden.estadoEnvio === 'Entregado') {
+      return res.status(400).json({
+        success: false,
+        message: 'No se puede cancelar una orden que ya fue enviada'
+      });
+    }
+
+    // Devolver stock a los productos
+    for (let item of orden.productos) {
+      await Product.findByIdAndUpdate(
+        item.producto,
+        { $inc: { stock: item.cantidad } }
+      );
+    }
+
+    orden.estadoEnvio = 'Cancelado';
+    orden.estadoPago = 'Rechazado';
+    
+    const ordenActualizada = await orden.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Orden cancelada exitosamente',
+      data: ordenActualizada
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al cancelar la orden',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Obtener estadísticas de órdenes (solo admin)
+// @route   GET /api/orders/admin/estadisticas
+// @access  Private/Admin
+export const obtenerEstadisticasOrdenes = async (req, res) => {
+  try {
+    const totalOrdenes = await Order.countDocuments();
+    const ordenesPendientes = await Order.countDocuments({ estadoPago: 'Pendiente' });
+    const ordenesPagadas = await Order.countDocuments({ estadoPago: 'Pagado' });
+    const ordenesEnviadas = await Order.countDocuments({ estadoEnvio: 'Enviado' });
+    const ordenesEntregadas = await Order.countDocuments({ estadoEnvio: 'Entregado' });
+    const ordenesCanceladas = await Order.countDocuments({ estadoEnvio: 'Cancelado' });
+
+    // Calcular ingresos totales
+    const resultadoIngresos = await Order.aggregate([
+      { $match: { estadoPago: 'Pagado' } },
+      { $group: { _id: null, total: { $sum: '$precioTotal' } } }
+    ]);
+    const ingresosTotales = resultadoIngresos.length > 0 ? resultadoIngresos[0].total : 0;
+
+    // Obtener últimas 10 órdenes
+    const ultimasOrdenes = await Order.find({})
+      .populate('usuario', 'nombre apellido email')
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        resumen: {
+          totalOrdenes,
+          ordenesPendientes,
+          ordenesPagadas,
+          ordenesEnviadas,
+          ordenesEntregadas,
+          ordenesCanceladas,
+          ingresosTotales
+        },
+        ultimasOrdenes
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener estadísticas',
       error: error.message
     });
   }
