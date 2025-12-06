@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema({
   plataforma: {
     type: String,
     required: [true, 'La plataforma es obligatoria'],
-    enum: ['PlayStation 5', 'PlayStation 4', 'Xbox Series X/S', 'Xbox One', 'Nintendo Switch', 'PC', 'Multi-plataforma']
+    enum: ['PlayStation 5', 'PlayStation 4', 'Xbox Series X/S', 'Xbox One', 'Nintendo Switch', 'PC', 'Multi-plataforma', 'Accesorios']
   },
   genero: {
     type: String,

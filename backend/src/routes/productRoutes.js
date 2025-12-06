@@ -7,6 +7,7 @@ import {
   eliminarProducto,
   obtenerProductosDestacados
 } from '../controllers/productController.js';
+import { protegerRuta, esAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -15,9 +16,9 @@ router.get('/', obtenerProductos);
 router.get('/destacados', obtenerProductosDestacados);
 router.get('/:id', obtenerProductoPorId);
 
-// Rutas privadas (Admin) - Agregaremos middleware de autenticación después
-router.post('/', crearProducto);
-router.put('/:id', actualizarProducto);
-router.delete('/:id', eliminarProducto);
+// Rutas privadas (Admin)
+router.post('/', protegerRuta, esAdmin, crearProducto);
+router.put('/:id', protegerRuta, esAdmin, actualizarProducto);
+router.delete('/:id', protegerRuta, esAdmin, eliminarProducto);
 
 export default router;

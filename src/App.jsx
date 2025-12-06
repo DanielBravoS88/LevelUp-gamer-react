@@ -11,6 +11,7 @@ import ProductDetail from './components/ProductDetail.jsx'
 import Cart from './components/Cart.jsx'
 import PurchaseSummary from './components/PurchaseSummary.jsx'
 import RegisterModal from './components/RegisterModal.jsx'
+import NewsModal from './components/NewsModal.jsx'
 import Reviews from './components/Reviews.jsx'
 import Footer from './components/Footer.jsx'
 import productsData from './data/products.json'
@@ -26,7 +27,7 @@ import NotFound from './pages/NotFound'
 const chips=['Todos','PS5','Switch','Consolas','Accesorios']
 
 function Home({state}){
-  const {filter,setFilter,q,setQ,order,setOrder,add,items} = state
+  const {filter,setFilter,q,setQ,order,setOrder,add,items,newsModal,setNewsModal} = state
   return (<>
     <AppNavbar />
     <Header q={q} setQ={setQ} onOpenLogin={()=>state.setLoginOpen(true)} onOpenCart={()=>state.setCartOpen(true)} cartQty={state.totalQty}/>
@@ -64,9 +65,18 @@ function Home({state}){
   <section className="container section">
         <h3>Noticias y guías para gamers</h3>
         <div className="blog">
-          <article className="post"><h4>¿Cómo elegir tu primer mando pro?</h4><p className="desc">Consejos prácticos para jugar shooters y carreras con mayor precisión.</p></article>
-          <article className="post"><h4>PS5 vs. Switch: ¿qué te conviene?</h4><p className="desc">Comparamos catálogo, accesorios y ecosistema para ayudarte a decidir.</p></article>
-          <article className="post"><h4>Guía: canjea tus puntos LevelUp</h4><p className="desc">Sube de nivel y consigue descuentos al referir amigos y completar retos.</p></article>
+          <article className="post" onClick={()=>setNewsModal('mando-pro')} style={{cursor:'pointer'}}>
+            <h4>¿Cómo elegir tu primer mando pro?</h4>
+            <p className="desc">Consejos prácticos para jugar shooters y carreras con mayor precisión.</p>
+          </article>
+          <article className="post" onClick={()=>setNewsModal('ps5-vs-switch')} style={{cursor:'pointer'}}>
+            <h4>PS5 vs. Switch: ¿qué te conviene?</h4>
+            <p className="desc">Comparamos catálogo, accesorios y ecosistema para ayudarte a decidir.</p>
+          </article>
+          <article className="post" onClick={()=>setNewsModal('puntos-levelup')} style={{cursor:'pointer'}}>
+            <h4>Guía: canjea tus puntos LevelUp</h4>
+            <p className="desc">Sube de nivel y consigue descuentos al referir amigos y completar retos.</p>
+          </article>
         </div>
       </section>
       <section className="container section">
@@ -79,6 +89,7 @@ function Home({state}){
     <Footer/>
     <Cart open={state.cartOpen} items={state.cart} changeQty={state.changeQty} removeItem={state.remove} total={state.total} onClose={()=>state.setCartOpen(false)}/>
     <RegisterModal open={state.loginOpen} onClose={()=>state.setLoginOpen(false)}/>
+    <NewsModal open={!!newsModal} article={newsModal} onClose={()=>setNewsModal(null)}/>
   </>)
 }
 
@@ -92,8 +103,24 @@ function AppContent() {
   const [cartOpen,setCartOpen] = useState(false)
   const [loginOpen,setLoginOpen] = useState(false)
   const [checkoutOpen,setCheckoutOpen] = useState(false)
+  const [newsModal,setNewsModal] = useState(null)
   const [cart,setCart] = useState(()=>{ try { return JSON.parse(localStorage.getItem('cart')||'[]') } catch { return [] } })
   const [loadingProducts, setLoadingProducts] = useState(true)
+
+  // Mapear plataformas del backend a categorías del frontend
+  const mapPlatformToCategory = (plataforma) => {
+    const mapping = {
+      'PlayStation 5': 'PS5',
+      'PlayStation 4': 'PS5', // Agrupamos PS4 con PS5
+      'Nintendo Switch': 'Switch',
+      'Xbox Series X/S': 'Consolas',
+      'Xbox One': 'Consolas',
+      'PC': 'Consolas',
+      'Multi-plataforma': 'Consolas',
+      'Accesorios': 'Accesorios'
+    };
+    return mapping[plataforma] || 'Consolas';
+  };
 
   // Cargar productos desde el backend
   useEffect(() => {
@@ -108,7 +135,7 @@ function AppContent() {
             _id: p._id,
             name: p.nombre,
             price: p.precio,
-            category: p.plataforma,
+            category: mapPlatformToCategory(p.plataforma),
             description: p.descripcion,
             image: p.imagen || '/img/placeholder.jpg'
           }));
@@ -173,7 +200,7 @@ function AppContent() {
 
   const state = { filter,setFilter,q,setQ,order,setOrder,add,items,buyNow,
                   cart,changeQty,remove,total,totalQty,
-                  cartOpen,setCartOpen,loginOpen,setLoginOpen }
+                  cartOpen,setCartOpen,loginOpen,setLoginOpen,newsModal,setNewsModal }
 
   return (
     <>
