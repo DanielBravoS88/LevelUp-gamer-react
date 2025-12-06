@@ -17,7 +17,7 @@ export default function AppNavbar() {
         <div className="navbar-brand">
           <Link to="/" className="brand-link">
             <div className="logo">LU</div>
-            <h1>LevelUp Gamer</h1>
+            <h1>LevelUp <span>Gamer</span></h1>
           </Link>
         </div>
 

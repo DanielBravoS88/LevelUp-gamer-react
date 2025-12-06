@@ -28,14 +28,35 @@ const chips=['Todos','PS5','Switch','Consolas','Accesorios']
 
 function Home({state}){
   const {filter,setFilter,q,setQ,order,setOrder,add,items,newsModal,setNewsModal} = state
+  
+  const handlePromoClick = (promoType) => {
+    if (promoType === 'switch-bundle') {
+      setFilter('Switch');
+      setQ('');
+      // Scroll suave a la sección de productos
+      setTimeout(() => {
+        document.querySelector('.chips-row')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } else if (promoType === 'ps5-accessories') {
+      setFilter('Accesorios');
+      setQ('PS5');
+    }
+  };
+  
   return (<>
     <AppNavbar />
     <Header q={q} setQ={setQ} onOpenLogin={()=>state.setLoginOpen(true)} onOpenCart={()=>state.setCartOpen(true)} cartQty={state.totalQty}/>
     <Banner/>
     <main>
       <section className="container promos-row">
-        <a className="promo" href="#"><div className="promo-title">Promo 1: Figuras / Anime</div><div className="promo-sub">Hasta -20% esta semana</div></a>
-        <a className="promo" href="#"><div className="promo-title">Promo 2: Accesorios PS5</div><div className="promo-sub">Controles, headsets, carga</div></a>
+        <a className="promo" href="#" onClick={(e)=>{e.preventDefault(); handlePromoClick('switch-bundle');}}>
+          <div className="promo-title">Promo 1: Nintendo Switch + Juego</div>
+          <div className="promo-sub">Consola + Juego físico - Precio especial</div>
+        </a>
+        <a className="promo" href="#" onClick={(e)=>{e.preventDefault(); handlePromoClick('ps5-accessories');}}>
+          <div className="promo-title">Promo 2: Accesorios PS5</div>
+          <div className="promo-sub">Controles, headsets, carga</div>
+        </a>
       </section>
       <section className="container headline">
         <div className="headline-inner">
