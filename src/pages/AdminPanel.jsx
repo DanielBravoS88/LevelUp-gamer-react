@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
+import API_URL from '../config/api';
 
-const API_URL = 'http://localhost:5000/api/products';
+const API_PRODUCTS_URL = `${API_URL}/api/products`;
 
 export default function AdminPanel() {
   const { user } = useAuth();
@@ -34,7 +35,7 @@ export default function AdminPanel() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch(API_URL);
+      const response = await fetch(API_PRODUCTS_URL);
       const data = await response.json();
       
       if (data.success) {
@@ -55,7 +56,7 @@ export default function AdminPanel() {
     if (!newProduct.nombre || !newProduct.precio) return;
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(API_PRODUCTS_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +110,7 @@ export default function AdminPanel() {
     if (!editingProduct || !newProduct.nombre || !newProduct.precio) return;
 
     try {
-      const response = await fetch(`${API_URL}/${editingProduct._id}`, {
+      const response = await fetch(`${API_PRODUCTS_URL}/${editingProduct._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +152,7 @@ export default function AdminPanel() {
     if (!confirm('¿Estás seguro de eliminar este producto?')) return;
 
     try {
-      const response = await fetch(`${API_URL}/${productId}`, {
+      const response = await fetch(`${API_PRODUCTS_URL}/${productId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`

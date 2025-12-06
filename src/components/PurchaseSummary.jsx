@@ -71,7 +71,7 @@ export default function PurchaseSummary({ cart=[], clearCart }){
       console.log('Enviando orden:', orderData); // Para debug
 
       // Enviar orden al backend
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch(`${API_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export default function PurchaseSummary({ cart=[], clearCart }){
       console.error('Error completo:', err);
       const errorMsg = err.message || 'Error de conexión con el servidor';
       setError(errorMsg);
-      alert('Error de conexión:\n' + errorMsg + '\n\n¿El backend está corriendo en http://localhost:5000?');
+      alert('Error de conexión:\n' + errorMsg + '\n\nVerifica que el backend esté disponible.');
     } finally {
       setLoading(false);
     }

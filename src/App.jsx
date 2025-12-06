@@ -145,12 +145,10 @@ function AppContent() {
 
   // Cargar productos desde el backend
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/products');
-        const data = await response.json();
-        
-        if (data.success && data.data) {
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/products`);
+      const data = await response.json();        if (data.success && data.data) {
           // Transformar productos del backend al formato del frontend
           const transformedProducts = data.data.map(p => ({
             _id: p._id,

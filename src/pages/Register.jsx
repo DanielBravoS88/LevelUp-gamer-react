@@ -41,7 +41,7 @@ export default function Register() {
 
     try {
       // Llamar al backend
-      const response = await fetch('http://localhost:5000/api/users/registro', {
+      const response = await fetch(`${API_URL}/api/users/registro`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
