@@ -13,6 +13,7 @@ export default function AdminPanel() {
     nombre: '',
     precio: '',
     categoria: 'PS5',
+    genero: 'Acción',
     descripcion: '',
     imagen: '',
     stock: 10
@@ -64,10 +65,13 @@ export default function AdminPanel() {
           nombre: newProduct.nombre,
           precio: parseInt(newProduct.precio),
           categoria: newProduct.categoria,
+          plataforma: newProduct.categoria === 'PS5' ? 'PlayStation 5' : 
+                     newProduct.categoria === 'Switch' ? 'Nintendo Switch' : 
+                     newProduct.categoria === 'Accesorios' ? 'Accesorios' : 'Multi-plataforma',
+          genero: newProduct.genero,
           descripcion: newProduct.descripcion || 'Sin descripción',
           imagen: newProduct.imagen || '/img/placeholder.jpg',
           stock: parseInt(newProduct.stock) || 10,
-          plataforma: newProduct.categoria,
           destacado: false,
           activo: true
         })
@@ -77,7 +81,7 @@ export default function AdminPanel() {
 
       if (data.success) {
         setProducts([...products, data.data]);
-        setNewProduct({ nombre: '', precio: '', categoria: 'PS5', descripcion: '', imagen: '', stock: 10 });
+        setNewProduct({ nombre: '', precio: '', categoria: 'PS5', genero: 'Acción', descripcion: '', imagen: '', stock: 10 });
         alert('✅ Producto agregado exitosamente');
       } else {
         alert('❌ Error: ' + data.message);
@@ -93,6 +97,7 @@ export default function AdminPanel() {
       nombre: product.nombre,
       precio: product.precio.toString(),
       categoria: product.categoria,
+      genero: product.genero || 'Acción',
       descripcion: product.descripcion || '',
       imagen: product.imagen || '',
       stock: product.stock || 10
@@ -114,10 +119,13 @@ export default function AdminPanel() {
           nombre: newProduct.nombre,
           precio: parseInt(newProduct.precio),
           categoria: newProduct.categoria,
+          plataforma: newProduct.categoria === 'PS5' ? 'PlayStation 5' : 
+                     newProduct.categoria === 'Switch' ? 'Nintendo Switch' : 
+                     newProduct.categoria === 'Accesorios' ? 'Accesorios' : 'Multi-plataforma',
+          genero: newProduct.genero,
           descripcion: newProduct.descripcion,
           imagen: newProduct.imagen,
-          stock: parseInt(newProduct.stock),
-          plataforma: newProduct.categoria
+          stock: parseInt(newProduct.stock)
         })
       });
 
@@ -129,7 +137,7 @@ export default function AdminPanel() {
         );
         setProducts(updatedProducts);
         setEditingProduct(null);
-        setNewProduct({ nombre: '', precio: '', categoria: 'PS5', descripcion: '', imagen: '', stock: 10 });
+        setNewProduct({ nombre: '', precio: '', categoria: 'PS5', genero: 'Acción', descripcion: '', imagen: '', stock: 10 });
         alert('✅ Producto actualizado exitosamente');
       } else {
         alert('❌ Error: ' + data.message);
@@ -166,7 +174,7 @@ export default function AdminPanel() {
 
   const cancelEdit = () => {
     setEditingProduct(null);
-    setNewProduct({ nombre: '', precio: '', categoria: 'PS5', descripcion: '', imagen: '', stock: 10 });
+    setNewProduct({ nombre: '', precio: '', categoria: 'PS5', genero: 'Acción', descripcion: '', imagen: '', stock: 10 });
   };
 
   if (loading) {
@@ -224,6 +232,23 @@ export default function AdminPanel() {
                 <option value="Switch">Switch</option>
                 <option value="Accesorios">Accesorios</option>
                 <option value="Consolas">Consolas</option>
+              </select>
+              <select
+                value={newProduct.genero}
+                onChange={(e) => setNewProduct({ ...newProduct, genero: e.target.value })}
+                required
+              >
+                <option value="Acción">Acción</option>
+                <option value="Aventura">Aventura</option>
+                <option value="RPG">RPG</option>
+                <option value="Deportes">Deportes</option>
+                <option value="Carreras">Carreras</option>
+                <option value="Estrategia">Estrategia</option>
+                <option value="Shooter">Shooter</option>
+                <option value="Simulación">Simulación</option>
+                <option value="Terror">Terror</option>
+                <option value="Pelea">Pelea</option>
+                <option value="Plataformas">Plataformas</option>
               </select>
               <input
                 type="text"
