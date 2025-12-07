@@ -1,6 +1,7 @@
 import React,{useEffect,useMemo,useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import API_URL from '../config/api'
 
 const CLP = new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0})
 const money = n => CLP.format(n||0)
